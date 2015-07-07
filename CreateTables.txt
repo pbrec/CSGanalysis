@@ -1,0 +1,136 @@
+-- Create syntax for TABLE 'assembler_set'
+CREATE TABLE `assembler_set` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `used_in_thesis` enum('0','1') NOT NULL DEFAULT '0',
+  `animal` varchar(1) DEFAULT NULL,
+  `assembler` varchar(1) DEFAULT NULL,
+  `e` int(11) DEFAULT NULL,
+  `d` tinyint(4) DEFAULT NULL,
+  `N25` int(11) DEFAULT NULL,
+  `N50` mediumint(11) DEFAULT NULL,
+  `N75` mediumint(11) DEFAULT NULL,
+  `N95` mediumint(11) DEFAULT NULL,
+  `N10` mediumint(11) DEFAULT NULL,
+  `N20` mediumint(11) DEFAULT NULL,
+  `N30` mediumint(11) DEFAULT NULL,
+  `N40` mediumint(11) DEFAULT NULL,
+  `N60` mediumint(11) DEFAULT NULL,
+  `N70` mediumint(11) DEFAULT NULL,
+  `N80` mediumint(11) DEFAULT NULL,
+  `N90` mediumint(11) DEFAULT NULL,
+  `num_ctgs` int(11) DEFAULT NULL,
+  `num_loci` int(11) DEFAULT NULL,
+  `longest` mediumint(11) DEFAULT NULL,
+  `shortest` mediumint(11) DEFAULT NULL,
+  `mean` float DEFAULT NULL,
+  `median` mediumint(11) DEFAULT NULL,
+  `bp` int(11) DEFAULT NULL,
+  `cmd_line` longtext,
+  `reads_mapped` int(11) DEFAULT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `file` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=166 DEFAULT CHARSET=latin1;
+
+-- Create syntax for TABLE 'assemblies'
+CREATE TABLE `assemblies` (
+  `animal` varchar(1) DEFAULT NULL,
+  `asID` int(11) NOT NULL DEFAULT '0',
+  `locus` int(11) NOT NULL DEFAULT '0',
+  `transfrag` int(11) NOT NULL DEFAULT '0',
+  `extra` blob,
+  `lens` int(11) DEFAULT NULL,
+  `seq` longtext,
+  PRIMARY KEY (`asID`,`locus`,`transfrag`),
+  KEY `locus` (`locus`,`transfrag`),
+  KEY `asID` (`asID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Create syntax for TABLE 'OR_blast'
+CREATE TABLE `OR_blast` (
+  `asID` int(11) DEFAULT NULL,
+  `bid` enum('tbn','bp') DEFAULT NULL,
+  `qseqid` int(11) unsigned DEFAULT NULL,
+  `sseqid` int(11) DEFAULT NULL,
+  `transfrag` int(11) DEFAULT NULL,
+  `orfnum` int(11) DEFAULT NULL,
+  `lens` mediumint(9) unsigned DEFAULT NULL,
+  `qstart` mediumint(9) DEFAULT NULL,
+  `qend` mediumint(9) DEFAULT NULL,
+  `sstart` mediumint(9) DEFAULT NULL,
+  `send` mediumint(9) DEFAULT NULL,
+  `evalue` double DEFAULT NULL,
+  `bitscore` float DEFAULT NULL,
+  `pident` float DEFAULT NULL,
+  `nident` mediumint(9) DEFAULT NULL,
+  `lp` tinyint(4) DEFAULT NULL,
+  KEY `asID` (`asID`,`qseqid`,`transfrag`,`orfnum`),
+  KEY `asID_2` (`asID`,`lp`,`bid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Create syntax for TABLE 'OR_blastp'
+CREATE TABLE `OR_blastp` (
+  `asID` int(11) NOT NULL DEFAULT '0',
+  `locus` int(11) unsigned NOT NULL DEFAULT '0',
+  `transfrag` int(11) NOT NULL DEFAULT '0',
+  `sseqid` int(11) NOT NULL DEFAULT '0',
+  `orfnum` int(11) NOT NULL DEFAULT '0',
+  `lens` mediumint(9) unsigned DEFAULT NULL,
+  `qstart` mediumint(9) unsigned DEFAULT NULL,
+  `qend` mediumint(9) unsigned DEFAULT NULL,
+  `sstart` mediumint(9) unsigned DEFAULT NULL,
+  `send` mediumint(9) unsigned DEFAULT NULL,
+  `evalue` double unsigned DEFAULT NULL,
+  `bitscore` float unsigned DEFAULT NULL,
+  `pident` float unsigned DEFAULT NULL,
+  `nident` mediumint(9) unsigned DEFAULT NULL,
+  `lp` tinyint(4) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`asID`,`locus`,`transfrag`,`sseqid`,`orfnum`,`lp`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Create syntax for TABLE 'OR_ORFs'
+CREATE TABLE `OR_ORFs` (
+  `asID` int(11) NOT NULL DEFAULT '0',
+  `locus` int(11) NOT NULL DEFAULT '0',
+  `transfrag` int(11) NOT NULL DEFAULT '0',
+  `orfnum` int(11) NOT NULL DEFAULT '0',
+  `seq` longtext,
+  `lens` int(11) DEFAULT NULL,
+  `lp` tinyint(4) NOT NULL DEFAULT '0',
+  `tp` tinyint(4) DEFAULT NULL,
+  `uni` tinyint(4) DEFAULT '1',
+  `same_ass_part_of_other` tinyint(4) DEFAULT '0',
+  `same_ass_shared` tinyint(4) DEFAULT '0',
+  `dnaseq` longtext,
+  `start` int(11) DEFAULT NULL,
+  `stop` int(11) DEFAULT NULL,
+  `strand` enum('-','+') DEFAULT NULL,
+  PRIMARY KEY (`asID`,`locus`,`transfrag`,`orfnum`,`lp`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Create syntax for TABLE 'OR_pipe_cmds'
+CREATE TABLE `OR_pipe_cmds` (
+  `asID` int(11) unsigned NOT NULL,
+  `lp` int(11) DEFAULT NULL,
+  `cmd` varchar(500) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Create syntax for TABLE 'OR_tblastn'
+CREATE TABLE `OR_tblastn` (
+  `asID` int(11) NOT NULL DEFAULT '0',
+  `qseqid` int(11) unsigned NOT NULL DEFAULT '0',
+  `locus` int(11) NOT NULL DEFAULT '0',
+  `transfrag` int(11) NOT NULL DEFAULT '0',
+  `lens` mediumint(9) unsigned DEFAULT NULL,
+  `qstart` mediumint(9) DEFAULT NULL,
+  `qend` mediumint(9) DEFAULT NULL,
+  `sstart` mediumint(9) DEFAULT NULL,
+  `send` mediumint(9) DEFAULT NULL,
+  `evalue` double DEFAULT NULL,
+  `bitscore` float DEFAULT NULL,
+  `pident` float DEFAULT NULL,
+  `nident` mediumint(9) DEFAULT NULL,
+  `lp` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`asID`,`qseqid`,`locus`,`transfrag`,`lp`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
